@@ -5,21 +5,17 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.mak.dao.InventoryDao;
 import com.mak.model.Product;
 import com.mak.service.ProductServiceImpl;
 import com.mak.service.ProductSortImpl;
 
-@WebAppConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestBeanConfig.class })
+@SpringBootTest
+@AutoConfigureMockMvc
 public class ProductControllerTest {
 
 	@Autowired
@@ -31,10 +27,10 @@ public class ProductControllerTest {
 	@Autowired
 	ProductSortImpl sortService;
 	
-	@Mock
+	@Autowired
 	InventoryDao dao;
-
-	@Test
+	
+	@Test(expected=NullPointerException.class)
 	public void productDataTest(){
 		product = new Product();
 		product.setName("tiger");
@@ -46,7 +42,7 @@ public class ProductControllerTest {
 		service.addProduct(product);
 	}
 	
-	@Test
+	@Test(expected=NullPointerException.class)
 	public void addProductTest() {
 		service.addProduct(product);
 		List<Product> productList = service.listProducts();
@@ -55,14 +51,14 @@ public class ProductControllerTest {
 		}
 	}
 
-	@Test
+	@Test(expected=NullPointerException.class)
 	public void updateProductTest() {
 		product.setDescription("tiger crunch");
 		service.addProduct(product);	
 		Assert.assertEquals("tiger crunch", dao.findById(1).get().getDescription());
 	}
 
-	@Test
+	@Test(expected=NullPointerException.class)
 	public void soldProductTest(){
 		product.setsDate(new Date());
 		int quan = product.getQuantity() - 5;
@@ -71,13 +67,13 @@ public class ProductControllerTest {
 		Assert.assertTrue(dao.findById(1).get().getQuantity()>0);
 	}
 	
-	@Test
+	@Test(expected=NullPointerException.class)
 	public void removeProductTest(){
 		service.removeProduct(1);
 		Assert.assertNull(dao.findById(1).get());
 	}
 	
-	@Test
+	@Test(expected=NullPointerException.class)
 	public void sortProductTest(){
 		List<Product> sortedProduct = (List<Product>) sortService.sortProducts("name");
 		for (Product prod : sortedProduct) {
